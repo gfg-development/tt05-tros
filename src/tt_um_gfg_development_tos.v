@@ -16,7 +16,7 @@ module tt_um_gfg_development_tos (
     // use bidirectionals as outputs
     assign uio_oe       = 8'b11111111;
 
-    assign uo_out[6:0]  = 8'b1111111;
+    assign uo_out[5:0]  = 8'b111111;
     assign uio_out      = 8'b11111111;
 
     assign uo_out[6]    = nand2_sub_clk;
