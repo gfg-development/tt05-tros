@@ -7,6 +7,7 @@ project:
 # Source files must be in ./src and you must list each source file separately
   source_files:
     - ros_nand4.v
+    - ros_nand2_sub.v
     - tt_um_gfg_development_tos.v
   top_module:  "tt_um_gfg_development_tos"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
 
