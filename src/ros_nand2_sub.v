@@ -14,8 +14,8 @@ module ros_nand2_sub #( parameter STAGES = 33) (
     (* keep = "true" *) sky130_fd_sc_hd__nand2_1 fstage (.A(nets[STAGES - 1]), .B(ena), .Y(nets[0]));
     genvar i;
     generate
-		for (i = 1; i < STAGES; i = i + 1) begin
-			(* keep = "true" *) sky130_fd_sc_hd__nand2_1 stage (.A(nets[i - 1]), .B(sub_voltage), .Y(nets[i]));
-		end
-  	endgenerate
+        for (i = 1; i < STAGES; i = i + 1) begin
+            (* keep = "true" *) sky130_fd_sc_hd__nand2_1 stage (.A(nets[i - 1]), .B(sub_voltage), .Y(nets[i]));
+        end
+    endgenerate
 endmodule

@@ -7,9 +7,10 @@ project:
 # Source files must be in ./src and you must list each source file separately
   source_files:
     - ros_nand4.v
+    - ros_nand4_cap.v
     - ros_nand2_sub.v
-    - tt_um_gfg_development_tos.v
-  top_module:  "tt_um_gfg_development_tos"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
+    - tt_um_gfg_development_tros.v
+  top_module:  "tt_um_gfg_development_tros"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
 
 # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"    # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2 or 8x2
@@ -23,7 +24,7 @@ yaml_version: 4
 # Here is a great example: https://github.com/davidsiaw/tt02-davidsiaw-stackcalc/blob/38c5647f83aad2aec675d566aa3d67b98f0aac81/info.yaml
 documentation: 
   author:       "Gerrit Grutzeck"      # Your name
-  title:        "SiPi"      # Project title
+  title:        "Tros"      # Project title
   language:     "Verilog" # other examples include Verilog, Amaranth, VHDL, etc
   description:  ""      # Short description of what your project does
 
