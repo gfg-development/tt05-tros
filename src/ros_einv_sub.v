@@ -15,7 +15,7 @@ module ros_einv_sub #(parameter STAGES = 3) (
     genvar i;
     genvar j;
     generate
-        for (i = 1; i < STAGES; i = i + 1) begin
+        for (i = 0; i < STAGES; i = i + 1) begin
             for (j = 0; j < 3; j = j + 1) begin
                 (* keep = "true" *) sky130_fd_sc_hd__einvp_1 tristage (.A(nets[4 * i + j]), .TE(sub_voltage), .Z(nets[4 * i + j + 1]));
             end

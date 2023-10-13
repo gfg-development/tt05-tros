@@ -67,7 +67,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     ros_nand4_cap ros_nand4_cap(.ena(ena), .clk(nand4_cap_clk));
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand4_cap_ros(
-        .clk(nand4_clk), 
+        .clk(nand4_cap_clk), 
         .gate(gate),
         .div_select(div_select),
         .reset(ctr_reset),
@@ -87,7 +87,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     ros_nand2_sub ros_nand2_sub(.ena(ena), .clk(nand2_sub_clk));
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand2_sub_ros(
-        .clk(nand4_clk), 
+        .clk(nand2_sub_clk), 
         .gate(gate),
         .div_select(div_select),
         .reset(ctr_reset),
