@@ -100,8 +100,21 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     /*
      * Implement a tristate inverter ring oscillator with sub threashold
      */
+    wire inv_sub_clk;
     wire inv_sub_div_clk;
     wire [COUNTER_LENGTH-1:0] inv_sub_cycle_count;
+
+    ros_einv_sub ros_einv_sub(.ena(ena), .clk(inv_sub_clk));
+
+    fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand2_sub_ros(
+        .clk(inv_sub_clk), 
+        .gate(gate),
+        .div_select(div_select),
+        .reset(ctr_reset),
+        .sync_select(sync_select),
+        .cycle_count(inv_sub_cycle_count),
+        .divided_clk(inv_sub_div_clk)
+    );
 
 
     /*
