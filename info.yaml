@@ -9,6 +9,7 @@ project:
     - ros_nand4.v
     - ros_nand4_cap.v
     - ros_nand2_sub.v
+    - fmeasurment.v
     - tt_um_gfg_development_tros.v
   top_module:  "tt_um_gfg_development_tros"      # Put the name of your top module here, must start with "tt_um_". Make it unique by including your github username
 

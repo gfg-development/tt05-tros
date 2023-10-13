@@ -1,6 +1,6 @@
 `default_nettype none
 
-module ros_nand4 #( parameter STAGES = 33) (
+module ros_nand4 #(parameter STAGES = 33) (
     input  wire       ena,      // will go high when the design is enabled
     output wire       clk       // clock
 );

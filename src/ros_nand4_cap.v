@@ -1,6 +1,6 @@
 `default_nettype none
 
-module ros_nand4_cap #( parameter STAGES = 23, NR_CAPS = 4) (
+module ros_nand4_cap #(parameter STAGES = 23, NR_CAPS = 4) (
     input  wire       ena,      // will go high when the design is enabled
     output wire       clk       // clock
 );
