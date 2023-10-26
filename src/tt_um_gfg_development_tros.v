@@ -58,12 +58,11 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     assign uio_oe       = 8'b00000000;
     assign uio_out      = 8'b11111111;
 
-    assign uo_out[3:1]  = 3'b111;
+    assign uo_out[4:1]  = 4'b1111;
 
     assign uo_out[0]    = data_stream;
-    assign uo_out[4]    = inv_sub_div_clk;
-    assign uo_out[5]    = nand4_cap_div_clk;
-    assign uo_out[6]    = nand2_sub_div_clk;
+    assign uo_out[5]    = inv_sub_div_clk;
+    assign uo_out[6]    = nand4_cap_div_clk;
     assign uo_out[7]    = nand4_div_clk;
 
 
