@@ -74,7 +74,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire nand4_div_clk;
     wire [COUNTER_LENGTH-1:0] nand4_cycle_count;
 
-    ros_nand4 ros_nand4(
+    ros_nand4 #(.STAGES(67)) ros_nand4(
         .ena(ena), 
         .clk(nand4_clk)
     );
@@ -97,7 +97,10 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire nand4_cap_div_clk;
     wire [COUNTER_LENGTH-1:0] nand4_cap_cycle_count;
 
-    ros_nand4_cap ros_nand4_cap(.ena(ena), .clk(nand4_cap_clk));
+    ros_nand4_cap #(.STAGES(35), .NR_CAPS(8)) ros_nand4_cap(
+        .ena(ena), 
+        .clk(nand4_cap_clk)
+    );
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand4_cap_ros(
         .clk(nand4_cap_clk), 
@@ -111,33 +114,16 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
 
 
     /*
-     * Implement the NAND2 ring oscillator with sub threshold at second input
-     */
-    wire nand2_sub_clk;
-    wire nand2_sub_div_clk;
-    wire [COUNTER_LENGTH-1:0] nand2_sub_cycle_count;
-
-    ros_nand2_sub ros_nand2_sub(.ena(ena), .clk(nand2_sub_clk));
-
-    fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand2_sub_ros(
-        .clk(nand2_sub_clk), 
-        .latch_counter(latch_counter),
-        .div_select(div_select),
-        .reset(ctr_reset),
-        .sync_select(sync_select),
-        .cycle_count(nand2_sub_cycle_count),
-        .divided_clk(nand2_sub_div_clk)
-    );
-
-
-    /*
      * Implement a tristate inverter ring oscillator with sub threashold
      */
     wire inv_sub_clk;
     wire inv_sub_div_clk;
     wire [COUNTER_LENGTH-1:0] inv_sub_cycle_count;
 
-    ros_einv_sub ros_einv_sub(.ena(ena), .clk(inv_sub_clk));
+    ros_einv_sub #(.STAGES(6)) ros_einv_sub(
+        .ena(ena), 
+        .clk(inv_sub_clk)
+    );
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_einv_sub_ros(
         .clk(inv_sub_clk), 
@@ -155,21 +141,23 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
      */
     wire data_stream;
     reg [COUNTER_LENGTH+3:0] shift_register;
+    reg [2:0] latch_counter_syncs;
 
     assign data_stream = shift_register[COUNTER_LENGTH+3] ^ clk;
 
     always @(posedge clk) begin
+        latch_counter_syncs               <= {latch_counter_syncs[2:1], latch_counter};
         if (ena) begin
-            if (latch_counter == 1) begin
+            if (latch_counter_syncs[2] == 1) begin
                 case (counter_select)
                     2'b00: shift_register <= {4'b1010, nand4_cycle_count}; 
                     2'b01: shift_register <= {4'b1010, nand4_cap_cycle_count};
-                    2'b10: shift_register <= {4'b1010, nand2_sub_cycle_count};
-                    2'b11: shift_register <= {4'b1010, inv_sub_cycle_count};
+                    2'b10: shift_register <= {4'b1010, inv_sub_cycle_count};
+                    2'b11: shift_register <= 0;
                 endcase
             end else begin
                 shift_register <= {shift_register[COUNTER_LENGTH+2:0], 1'b0};
-            end 
+            end
         end
     end
 endmodule

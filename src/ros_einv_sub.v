@@ -1,3 +1,36 @@
+/* A ring oscillator based on tri-state inverters.
+ * An enable singal allows to control the state the oscillator.
+ * With a sub-threshold voltage the frequency of the oscillator can
+ * be tuned. 
+ * To ensure, that the signal quality does not suffer to much, there
+ * are standard inverters in between the tri-state inverters.
+ *
+ * -----------------------------------------------------------------------------
+ *
+ * Copyright (C) 2023 Gerrit Grutzeck (g.grutzeck@gfg-development.de)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * -----------------------------------------------------------------------------
+ *
+ * Author   : Gerrit Grutzeck g.grutzeck@gfg-development.de
+ * File     : ros_einv_sub.v
+ * Create   : Oct 13, 2023
+ * Revise   : Oct 26, 2023
+ * Revision : 1.1
+ *
+ * -----------------------------------------------------------------------------
+ */
 `default_nettype none
 
 module ros_einv_sub #(parameter STAGES = 3) (
@@ -9,17 +42,35 @@ module ros_einv_sub #(parameter STAGES = 3) (
 
     assign clk = !nets[0];
 
-    (* keep = "true" *) sky130_fd_sc_hd__inv_1 sub_generator (.A(sub_voltage), .Y(sub_voltage));
+    // generation of the sub-thresold voltage
+    (* keep = "true" *) sky130_fd_sc_hd__inv_1 sub_generator (
+        .A(sub_voltage), 
+        .Y(sub_voltage)
+    );
 
-    (* keep = "true" *) sky130_fd_sc_hd__nand2_1 fstage (.A(nets[4 * STAGES]), .B(ena), .Y(nets[0]));
+    // first stage of the oscillator, with the enable signal
+    (* keep = "true" *) sky130_fd_sc_hd__nand2_1 fstage (
+        .A(nets[4 * STAGES]), 
+        .B(ena), 
+        .Y(nets[0])
+    );
+
+    // other stages of the oscillator
     genvar i;
     genvar j;
     generate
         for (i = 0; i < STAGES; i = i + 1) begin
             for (j = 0; j < 3; j = j + 1) begin
-                (* keep = "true" *) sky130_fd_sc_hd__einvp_1 tristage (.A(nets[4 * i + j]), .TE(sub_voltage), .Z(nets[4 * i + j + 1]));
+                (* keep = "true" *) sky130_fd_sc_hd__einvp_1 tristage (
+                    .A(nets[4 * i + j]), 
+                    .TE(sub_voltage), 
+                    .Z(nets[4 * i + j + 1])
+                );
             end
-            (* keep = "true" *) sky130_fd_sc_hd__inv_1 stage (.A(nets[4 * i + 3]), .Y(nets[4 * i + 4]));
+            (* keep = "true" *) sky130_fd_sc_hd__inv_1 stage (
+                .A(nets[4 * i + 3]), 
+                .Y(nets[4 * i + 4])
+            );
         end
     endgenerate
 endmodule
