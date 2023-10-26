@@ -47,7 +47,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
      * Configure and rename the IOs
      */
     wire reset                  = !rst_n;
-    wire gate                   = ui_in[0];
+    wire latch_counter          = ui_in[0];
     wire ctr_reset              = ui_in[1];
     wire latch_counter          = ui_in[2];
     wire [1:0] counter_select   = ui_in[4:3];
@@ -81,7 +81,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand4_ros(
         .clk(nand4_clk), 
-        .gate(gate),
+        .latch_counter(latch_counter),
         .div_select(div_select),
         .reset(ctr_reset),
         .sync_select(sync_select),
@@ -101,7 +101,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand4_cap_ros(
         .clk(nand4_cap_clk), 
-        .gate(gate),
+        .latch_counter(latch_counter),
         .div_select(div_select),
         .reset(ctr_reset),
         .sync_select(sync_select),
@@ -121,7 +121,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand2_sub_ros(
         .clk(nand2_sub_clk), 
-        .gate(gate),
+        .latch_counter(latch_counter),
         .div_select(div_select),
         .reset(ctr_reset),
         .sync_select(sync_select),
