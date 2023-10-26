@@ -61,17 +61,17 @@ module fmeasurment #(parameter LENGTH = 20) (
 
 
     // select between 2FF synchronized latch signal and asynchron latch signal
-    reg [1:0]   latch_counter_syncs;
+    reg [2:0]   latch_counter_syncs;
     wire        latch_counter_final;
 
-    assign latch_counter_final = sync_select ? latch_counter_syncs[1] : latch_counter;
+    assign latch_counter_final = sync_select ? latch_counter_syncs[2] : latch_counter;
 
 
     // counter and latch logic
     reg [LENGTH - 1:0] latched_cycle_count;
     reg [2:0]           reset_syncs;
     always @(posedge clk) begin
-        latch_counter_syncs     <= {latch_counter_syncs[0], latch_counter};
+        latch_counter_syncs     <= {latch_counter_syncs[1:0], latch_counter};
         reset_syncs             <= {reset_syncs[1:0], reset};
         if (reset_syncs[2]) begin
             counts              <= 0;

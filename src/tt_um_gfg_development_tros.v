@@ -143,18 +143,20 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire data_stream;
     reg [COUNTER_LENGTH+3:0] shift_register;
     reg [2:0] send_counter_syncs;
+    reg [2:0] ena_syncs;
 
     assign data_stream = shift_register[COUNTER_LENGTH+3] ^ clk;
 
     always @(posedge clk) begin
-        send_counter_syncs                <= {send_counter_syncs[1:0], send_counter};
-        if (ena) begin
+        send_counter_syncs                  <= {send_counter_syncs[1:0], send_counter};
+        ena_syncs                           <= {ena_syncs[1:0], ena};
+        if (ena_syncs[2]) begin
             if (send_counter_syncs[2] == 1) begin
                 case (counter_select)
-                    2'b00: shift_register <= {4'b1010, nand4_cycle_count}; 
-                    2'b01: shift_register <= {4'b1010, nand4_cap_cycle_count};
-                    2'b10: shift_register <= {4'b1010, inv_sub_cycle_count};
-                    2'b11: shift_register <= 0;
+                    2'b00: shift_register   <= {4'b1010, nand4_cycle_count}; 
+                    2'b01: shift_register   <= {4'b1010, nand4_cap_cycle_count};
+                    2'b10: shift_register   <= {4'b1010, inv_sub_cycle_count};
+                    2'b11: shift_register   <= 0;
                 endcase
             end else begin
                 shift_register <= {shift_register[COUNTER_LENGTH+2:0], 1'b0};
