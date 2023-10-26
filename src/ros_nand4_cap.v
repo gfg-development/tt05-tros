@@ -36,19 +36,19 @@ module ros_nand4_cap #(parameter STAGES = 23, NR_CAPS = 4) (
     input  wire       ena,      // will go high when the design is enabled
     output wire       clk       // clock
 );
-    (* keep = "true" *) wire [STAGES - 1:0] nets;
-    (* keep = "true" *) wire [STAGES * NR_CAPS - 1:0] open_nets;
+    (* keep = "true" *) wire [STAGES - 1:0] nets_notouch_;
+    (* keep = "true" *) wire [STAGES * NR_CAPS - 1:0] open_nets_notouch_;
 
     // use an inverter to buffer the signal
-    assign clk = !nets[0];
+    assign clk = !nets_notouch_[0];
 
     // first stage of the oscillator, with the enable signal
     (* keep = "true" *) sky130_fd_sc_hd__nand4_1 fstage (
         .A(ena), 
-        .B(nets[STAGES - 1]), 
-        .C(nets[STAGES - 1]),
-        .D(nets[STAGES - 1]), 
-        .Y(nets[0])
+        .B(nets_notouch_[STAGES - 1]), 
+        .C(nets_notouch_[STAGES - 1]),
+        .D(nets_notouch_[STAGES - 1]), 
+        .Y(nets_notouch_[0])
     );
     
     // other stages of the oscillator
@@ -57,11 +57,11 @@ module ros_nand4_cap #(parameter STAGES = 23, NR_CAPS = 4) (
     generate
         for (i = 1; i < STAGES; i = i + 1) begin
             (* keep = "true" *) sky130_fd_sc_hd__nand4_1 stage (
-                .A(nets[i - 1]), 
-                .B(nets[i - 1]), 
-                .C(nets[i - 1]), 
-                .D(nets[i - 1]), 
-                .Y(nets[i])
+                .A(nets_notouch_[i - 1]), 
+                .B(nets_notouch_[i - 1]), 
+                .C(nets_notouch_[i - 1]), 
+                .D(nets_notouch_[i - 1]), 
+                .Y(nets_notouch_[i])
             );
         end
     endgenerate
@@ -72,9 +72,9 @@ module ros_nand4_cap #(parameter STAGES = 23, NR_CAPS = 4) (
         for (i = 0; i < STAGES; i = i + 1) begin
             for (j = 0; j < NR_CAPS; j = j + 1) begin
                 (* keep = "true" *) sky130_fd_sc_hd__nand2_1 cap (
-                    .A(nets[i]), 
+                    .A(nets_notouch_[i]), 
                     .B(1'b0), 
-                    .Y(open_nets[NR_CAPS * i + j])
+                    .Y(open_nets_notouch_[NR_CAPS * i + j])
                 );
             end
         end

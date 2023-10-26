@@ -41,19 +41,19 @@ module ros_einv_sub #(parameter STAGES = 3) (
     genvar i;
     genvar j;
     
-    (* keep = "true" *) wire [4 * STAGES:0] nets;
-    (* keep = "true" *) wire sub_voltage;
+    (* keep = "true" *) wire [4 * STAGES:0] nets_notouch_;
+    (* keep = "true" *) wire sub_voltage_notouch_;
 
-    assign clk = !nets[0];
+    assign clk = !nets_notouch_[0];
 
     // generation of the sub-thresold voltage
     generate
         // generate four sub-thresold voltage generators
         for (i = 0; i < 4; i++) begin
             (* keep = "true" *) sky130_fd_sc_hd__einvp_1 sub_generator (
-                .A(sub_voltage),
+                .A(sub_voltage_notouch_),
                 .TE(voltage_control[4 + i] & ena),
-                .Z(sub_voltage)
+                .Z(sub_voltage_notouch_)
             );
         end
         
@@ -62,13 +62,13 @@ module ros_einv_sub #(parameter STAGES = 3) (
             (* keep = "true" *) sky130_fd_sc_hd__einvp_1 down (
                 .A(1'b1),
                 .TE(voltage_control[i] & ena),
-                .Z(sub_voltage)
+                .Z(sub_voltage_notouch_)
             );
 
             (* keep = "true" *) sky130_fd_sc_hd__einvp_1 up (
                 .A(1'b0),
                 .TE(voltage_control[i] & ena),
-                .Z(sub_voltage)
+                .Z(sub_voltage_notouch_)
             );
         end
 
@@ -76,9 +76,9 @@ module ros_einv_sub #(parameter STAGES = 3) (
     
     // first stage of the oscillator, with the enable signal
     (* keep = "true" *) sky130_fd_sc_hd__nand2_1 fstage (
-        .A(nets[4 * STAGES]), 
+        .A(nets_notouch_[4 * STAGES]), 
         .B(ena), 
-        .Y(nets[0])
+        .Y(nets_notouch_[0])
     );
 
     // other stages of the oscillator
@@ -86,14 +86,14 @@ module ros_einv_sub #(parameter STAGES = 3) (
         for (i = 0; i < STAGES; i = i + 1) begin
             for (j = 0; j < 3; j = j + 1) begin
                 (* keep = "true" *) sky130_fd_sc_hd__einvp_1 tristage (
-                    .A(nets[4 * i + j]), 
+                    .A(nets_notouch_[4 * i + j]), 
                     .TE(sub_voltage), 
-                    .Z(nets[4 * i + j + 1])
+                    .Z(nets_notouch_[4 * i + j + 1])
                 );
             end
             (* keep = "true" *) sky130_fd_sc_hd__inv_1 stage (
-                .A(nets[4 * i + 3]), 
-                .Y(nets[4 * i + 4])
+                .A(nets_notouch_[4 * i + 3]), 
+                .Y(nets_notouch_[4 * i + 4])
             );
         end
     endgenerate

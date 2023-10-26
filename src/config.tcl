@@ -73,6 +73,9 @@ set ::env(DECAP_CELL) "\
 set ::env(RUN_CTS) 1
 set ::env(CLOCK_PORT) {clk}
 
+# provide a way for people to stop the resizer from changing cells
+set ::env(RSZ_DONT_TOUCH_RX) "_notouch_"
+
 # Don't use power rings or met5 layer
 set ::env(DESIGN_IS_CORE) 0
 set ::env(RT_MAX_LAYER) {met4}

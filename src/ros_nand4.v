@@ -35,18 +35,18 @@ module ros_nand4 #(parameter STAGES = 33) (
     input  wire       ena,      // will go high when the design is enabled
     output wire       clk       // clock
 );
-    (* keep = "true" *) wire [STAGES - 1:0] nets;
+    (* keep = "true" *) wire [STAGES - 1:0] nets_notouch_;
 
     // use an inverter to buffer the signal
-    assign clk = !nets[0];
+    assign clk = !nets_notouch_[0];
 
     // first stage of the oscillator, with the enable signal
     (* keep = "true" *) sky130_fd_sc_hd__nand4_1 fstage (
         .A(ena), 
-        .B(nets[STAGES - 1]), 
-        .C(nets[STAGES - 1]),
-        .D(nets[STAGES - 1]), 
-        .Y(nets[0])
+        .B(nets_notouch_[STAGES - 1]), 
+        .C(nets_notouch_[STAGES - 1]),
+        .D(nets_notouch_[STAGES - 1]), 
+        .Y(nets_notouch_[0])
     );
 
     // other stages of the oscillator
@@ -54,11 +54,11 @@ module ros_nand4 #(parameter STAGES = 33) (
     generate
         for (i = 1; i < STAGES; i = i + 1) begin
             (* keep = "true" *) sky130_fd_sc_hd__nand4_1 stage (
-                .A(nets[i - 1]), 
-                .B(nets[i - 1]), 
-                .C(nets[i - 1]), 
-                .D(nets[i - 1]), 
-                .Y(nets[i])
+                .A(nets_notouch_[i - 1]), 
+                .B(nets_notouch_[i - 1]), 
+                .C(nets_notouch_[i - 1]), 
+                .D(nets_notouch_[i - 1]), 
+                .Y(nets_notouch_[i])
             );
         end
     endgenerate
