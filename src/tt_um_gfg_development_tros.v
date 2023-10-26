@@ -126,7 +126,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_einv_sub_ros(
         .clk(inv_sub_clk), 
-        .gate(gate),
+        .latch_counter(latch_counter),
         .div_select(div_select),
         .reset(ctr_reset),
         .sync_select(sync_select),
