@@ -1,36 +1,22 @@
-![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
+![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg)
 
-# What is Tiny Tapeout?
+# TROS
+This project for the tapeout via [Tiny Tapeout](https://tinytapeout.com/) aims at using
+ring oscillators to measure temperatures of the chip. 
 
-TinyTapeout is an educational project that aims to make it easier and cheaper than ever to get your digital designs manufactured on a real chip.
+## Introduction
+This design implements three different ring oscillators. The first one is a basic NAND 
+based oscillator. The second one adds additional NAND gates to the outputs of the stages
+of the oscillator to increase the capacitve loading. The last one uses the tri-state
+inverts with a sub-threshold tri-state enable. 
+Each of the oscillators should have a different temperature and voltage dependency. 
+Therefore it should be possible to measure the temperature (and supply voltage) with the
+help of a device specific calibration. 
 
-To learn more and get started, visit https://tinytapeout.com.
+For measuring the frequencies each oscillator is driving a counter. This counters are
+latched with the latch counter input. With the input transfer counter the currently 
+selected counter (counter select bits) is transfered via the serial data stream. The 
+transfer is driven by the clock of the design. As encoding a manchester encoding is used. 
 
-## Verilog Projects
-
-Edit the [info.yaml](info.yaml) and uncomment the `source_files` and `top_module` properties, and change the value of `language` to "Verilog". Add your Verilog files to the `src` folder, and list them in the `source_files` property.
-
-The GitHub action will automatically build the ASIC files using [OpenLane](https://www.zerotoasiccourse.com/terminology/openlane/).
-
-## How to enable the GitHub actions to build the ASIC files
-
-Please see the instructions for:
-
-- [Enabling GitHub Actions](https://tinytapeout.com/faq/#when-i-commit-my-change-the-gds-action-isnt-running)
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
-
-## Resources
-
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://discord.gg/rPK2nSjxy8)
-
-## What next?
-
-- Submit your design to the next shuttle [on the website](https://tinytapeout.com/#submit-your-design). The closing date is **November 4th**.
-- Edit this [README](README.md) and explain your design, how it works, and how to test it.
-- Share your GDS on your social network of choice, tagging it #tinytapeout and linking Matt's profile:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [matt-venn](https://www.linkedin.com/in/matt-venn/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - Twitter [#tinytapeout](https://twitter.com/hashtag/tinytapeout?src=hashtag_click) [@matthewvenn](https://twitter.com/matthewvenn)
+Furthermore, a divided version of the clock of each oscillator is outputted. The divisior
+can be configured with the frequency selection bits. 
