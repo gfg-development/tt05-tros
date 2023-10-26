@@ -53,7 +53,7 @@ module ros_einv_sub #(parameter STAGES = 3) (
             (* keep = "true" *) sky130_fd_sc_hd__einvp_1 sub_generator (
                 .A(sub_voltage),
                 .TE(voltage_control[4 + i] & ena),
-                .Y(sub_voltage)
+                .Z(sub_voltage)
             );
         end
         
@@ -62,13 +62,13 @@ module ros_einv_sub #(parameter STAGES = 3) (
             (* keep = "true" *) sky130_fd_sc_hd__einvp_1 down (
                 .A(1'b1),
                 .TE(voltage_control[i] & ena),
-                .Y(sub_voltage)
+                .Z(sub_voltage)
             );
 
             (* keep = "true" *) sky130_fd_sc_hd__einvp_1 up (
                 .A(1'b0),
                 .TE(voltage_control[i] & ena),
-                .Y(sub_voltage)
+                .Z(sub_voltage)
             );
         end
 
