@@ -49,7 +49,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire reset                  = !rst_n;
     wire latch_counter          = ui_in[0];
     wire ctr_reset              = ui_in[1];
-    wire latch_counter          = ui_in[2];
+    wire send_counter           = ui_in[2];
     wire [1:0] counter_select   = ui_in[4:3];
     wire sync_select            = ui_in[5];
     wire [1:0] div_select       = ui_in[7:6];
@@ -140,14 +140,14 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
      */
     wire data_stream;
     reg [COUNTER_LENGTH+3:0] shift_register;
-    reg [2:0] latch_counter_syncs;
+    reg [2:0] send_counter_syncs;
 
     assign data_stream = shift_register[COUNTER_LENGTH+3] ^ clk;
 
     always @(posedge clk) begin
-        latch_counter_syncs               <= {latch_counter_syncs[2:1], latch_counter};
+        send_counter_syncs                <= {send_counter_syncs[2:1], send_counter};
         if (ena) begin
-            if (latch_counter_syncs[2] == 1) begin
+            if (send_counter_syncs[2] == 1) begin
                 case (counter_select)
                     2'b00: shift_register <= {4'b1010, nand4_cycle_count}; 
                     2'b01: shift_register <= {4'b1010, nand4_cap_cycle_count};
