@@ -1,3 +1,36 @@
+/* The top-level of a number of ring oscillators, which 
+ * have different temperature dependencies. Furhtermore 
+ * it includes counters to measure the frequencies and 
+ * debug capabilities. 
+ * The data is read out via a serial interfaces, which is
+ * clocked from the RP2040 and uses a manchester coding.
+ *
+ * -----------------------------------------------------------------------------
+ *
+ * Copyright (C) 2023 Gerrit Grutzeck (g.grutzeck@gfg-development.de)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * -----------------------------------------------------------------------------
+ *
+ * Author   : Gerrit Grutzeck g.grutzeck@gfg-development.de
+ * File     : tt_um_gfg_development_tros.v
+ * Create   : Oct 13, 2023
+ * Revise   : Oct 26, 2023
+ * Revision : 1.1
+ *
+ * -----------------------------------------------------------------------------
+ */
 `default_nettype none
 
 module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
@@ -21,8 +54,8 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire sync_select            = ui_in[5];
     wire [1:0] div_select       = ui_in[7:6];
 
-    // use bidirectionals as outputs
-    assign uio_oe       = 8'b11111111;
+    // use bidirectionals as input
+    assign uio_oe       = 8'b00000000;
     assign uio_out      = 8'b11111111;
 
     assign uo_out[3:1]  = 3'b111;
