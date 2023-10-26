@@ -147,7 +147,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     assign data_stream = shift_register[COUNTER_LENGTH+3] ^ clk;
 
     always @(posedge clk) begin
-        send_counter_syncs                <= {send_counter_syncs[2:1], send_counter};
+        send_counter_syncs                <= {send_counter_syncs[1:0], send_counter};
         if (ena) begin
             if (send_counter_syncs[2] == 1) begin
                 case (counter_select)
