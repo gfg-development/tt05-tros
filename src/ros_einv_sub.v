@@ -47,7 +47,7 @@ module ros_einv_sub #(parameter STAGES = 3) (
     assign clk = !nets_notouch_[0];
 
     // generation of the sub-thresold voltage
-    generate
+    /*generate
         // generate four sub-thresold voltage generators
         for (i = 0; i < 4; i++) begin
             (* keep = "true" *) sky130_fd_sc_hd__einvp_1 sub_generator (
@@ -71,8 +71,12 @@ module ros_einv_sub #(parameter STAGES = 3) (
                 .Z(sub_voltage_notouch_)
             );
         end
-
-    endgenerate
+    endgenerate*/
+    (* keep = "true" *) sky130_fd_sc_hd__einvp_1 sub_generator (
+        .A(sub_voltage_notouch_),
+        .TE(ena),
+        .Z(sub_voltage_notouch_)
+    );
     
     // first stage of the oscillator, with the enable signal
     (* keep = "true" *) sky130_fd_sc_hd__nand2_1 fstage (
