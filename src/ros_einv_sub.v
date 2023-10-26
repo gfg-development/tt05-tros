@@ -34,20 +34,46 @@
 `default_nettype none
 
 module ros_einv_sub #(parameter STAGES = 3) (
-    input  wire       ena,      // will go high when the design is enabled
-    output wire       clk       // clock
+    input  wire       ena,              // will go high when the design is enabled
+    input  wire [7:0] voltage_control,  // control the sub-threshold voltage
+    output wire       clk               // clock
 );
+    genvar i;
+    genvar j;
+    
     (* keep = "true" *) wire [4 * STAGES:0] nets;
     (* keep = "true" *) wire sub_voltage;
 
     assign clk = !nets[0];
 
     // generation of the sub-thresold voltage
-    (* keep = "true" *) sky130_fd_sc_hd__inv_1 sub_generator (
-        .A(sub_voltage), 
-        .Y(sub_voltage)
-    );
+    generate
+        // generate four sub-thresold voltage generators
+        for (i = 0; i < 4; i++) begin
+            (* keep = "true" *) sky130_fd_sc_hd__einvp_1 sub_generator (
+                .A(sub_voltage),
+                .TE(voltage_control[4 + i] & ena),
+                .Y(sub_voltage)
+            );
+        end
+        
+        // generate two up and down pull stages
+        for (i = 0; i < 2; i++) begin
+            (* keep = "true" *) sky130_fd_sc_hd__einvp_1 down (
+                .A(1'b1),
+                .TE(voltage_control[i] & ena),
+                .Y(sub_voltage)
+            );
 
+            (* keep = "true" *) sky130_fd_sc_hd__einvp_1 up (
+                .A(1'b0),
+                .TE(voltage_control[i] & ena),
+                .Y(sub_voltage)
+            );
+        end
+
+    endgenerate
+    
     // first stage of the oscillator, with the enable signal
     (* keep = "true" *) sky130_fd_sc_hd__nand2_1 fstage (
         .A(nets[4 * STAGES]), 
@@ -56,8 +82,6 @@ module ros_einv_sub #(parameter STAGES = 3) (
     );
 
     // other stages of the oscillator
-    genvar i;
-    genvar j;
     generate
         for (i = 0; i < STAGES; i = i + 1) begin
             for (j = 0; j < 3; j = j + 1) begin

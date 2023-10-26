@@ -53,6 +53,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire [1:0] counter_select   = ui_in[4:3];
     wire sync_select            = ui_in[5];
     wire [1:0] div_select       = ui_in[7:6];
+    wire [7:0] voltage_control  = uio_in;
 
     // use bidirectionals as input
     assign uio_oe       = 8'b00000000;
@@ -121,6 +122,7 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
 
     ros_einv_sub #(.STAGES(6)) ros_einv_sub(
         .ena(ena), 
+        .voltage_control(voltage_control),
         .clk(inv_sub_clk)
     );
 
