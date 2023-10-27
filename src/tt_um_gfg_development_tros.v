@@ -33,7 +33,10 @@
  */
 `default_nettype none
 
-module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
+module tt_um_gfg_development_tros #(
+        parameter COUNTER_LENGTH = 20,
+        parameter SIMULATION = 0
+    ) (
     input  wire [7:0] ui_in,    // Dedicated inputs - connected to the input switches
     output wire [7:0] uo_out,   // Dedicated outputs - connected to the 7 segment display
     input  wire [7:0] uio_in,   // IOs: Bidirectional Input path
@@ -74,10 +77,16 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire nand4_div_clk;
     wire [COUNTER_LENGTH-1:0] nand4_cycle_count;
 
-    ros_nand4 #(.STAGES(67)) ros_nand4(
-        .ena(ena), 
-        .clk(nand4_clk)
-    );
+    generate
+        if (SIMULATION) begin
+            assign nand4_clk = clk;
+        end else begin
+            ros_nand4 #(.STAGES(67)) ros_nand4(
+                .ena(ena), 
+                .clk(nand4_clk)
+            );
+        end
+    endgenerate
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand4_ros(
         .clk(nand4_clk), 
@@ -97,10 +106,16 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire nand4_cap_div_clk;
     wire [COUNTER_LENGTH-1:0] nand4_cap_cycle_count;
 
-    ros_nand4_cap #(.STAGES(35), .NR_CAPS(8)) ros_nand4_cap(
-        .ena(ena), 
-        .clk(nand4_cap_clk)
-    );
+    generate
+        if (SIMULATION) begin
+            assign nand4_cap_clk = clk;
+        end else begin
+            ros_nand4_cap #(.STAGES(35), .NR_CAPS(8)) ros_nand4_cap(
+                .ena(ena), 
+                .clk(nand4_cap_clk)
+            );
+        end
+    endgenerate
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_nand4_cap_ros(
         .clk(nand4_cap_clk), 
@@ -120,11 +135,17 @@ module tt_um_gfg_development_tros #(parameter COUNTER_LENGTH = 20) (
     wire inv_sub_div_clk;
     wire [COUNTER_LENGTH-1:0] inv_sub_cycle_count;
 
-    ros_einv_sub #(.STAGES(6)) ros_einv_sub(
-        .ena(ena), 
-        .voltage_control(voltage_control),
-        .clk(inv_sub_clk)
-    );
+    generate
+        if (SIMULATION) begin
+            assign inv_sub_clk = clk;
+        end else begin
+            ros_einv_sub #(.STAGES(6)) ros_einv_sub(
+                .ena(ena), 
+                .voltage_control(voltage_control),
+                .clk(inv_sub_clk)
+            );
+        end
+    endgenerate
 
     fmeasurment #(.LENGTH(COUNTER_LENGTH)) fmeasurment_einv_sub_ros(
         .clk(inv_sub_clk), 
