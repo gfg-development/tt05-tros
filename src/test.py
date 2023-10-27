@@ -14,6 +14,8 @@ async def test_divider(signal, duration_ns, cycles):
         if result == timer:
             if cycles != count_div_clk:
                 raise TestFailure("Wrong number of clock cylces: {} != {}".format(count_div_clk, cycles))
+            else:
+                break
         elif result == edge_div_clk:
             count_div_clk += 1
 
