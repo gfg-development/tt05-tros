@@ -11,17 +11,16 @@ async def test_divider(signal, duration_ns, cycles):
     count_div_clk = 0
     while True:
         result = await First(timer, edge_div_clk)
-        signal._log.info("Fired")
-        if result == timer:
+        if result is timer:
             if cycles != count_div_clk:
-                raise TestFailure("Wrong number of clock cylces: {} != {}".format(count_div_clk, cycles))
+                assert count_div_clk == cycles, "Wrong number of clock cylces:"
             else:
                 break
         elif result == edge_div_clk:
             count_div_clk += 1
 
         if count_div_clk > cycles:
-            raise TestFailure("Wrong number of clock cylces: {} != {}".format(count_div_clk, cycles))
+            assert count_div_clk == cycles, "Wrong number of clock cylces:"
 
 
 @cocotb.test()
