@@ -76,7 +76,7 @@ module tt_um_gfg_development_tros #(
     wire nand4_div_clk;
     wire [COUNTER_LENGTH-1:0] nand4_cycle_count;
 
-    `ifdef SIMULATION
+    `ifdef SIM
         assign nand4_clk = clk;
     `else
         ros_nand4 #(.STAGES(67)) ros_nand4(
@@ -103,7 +103,7 @@ module tt_um_gfg_development_tros #(
     wire nand4_cap_div_clk;
     wire [COUNTER_LENGTH-1:0] nand4_cap_cycle_count;
 
-    `ifdef SIMULATION
+    `ifdef SIM
         assign nand4_cap_clk = clk;
     `else
         ros_nand4_cap #(.STAGES(35), .NR_CAPS(8)) ros_nand4_cap(
@@ -130,7 +130,7 @@ module tt_um_gfg_development_tros #(
     wire inv_sub_div_clk;
     wire [COUNTER_LENGTH-1:0] inv_sub_cycle_count;
 
-    `ifdef SIMULATION
+    `ifdef SIM
         assign inv_sub_clk = clk;
     `else
         ros_einv_sub #(.STAGES(6)) ros_einv_sub(
