@@ -9,8 +9,8 @@ TOPLEVEL_LANG ?= verilog
 ifneq ($(GATES),yes)
 
 # this is the only part you should need to modify:
-VERILOG_SOURCES += $(PWD)/tb.v $(PWD)/tt_um_gfg_development_tros.v $(PWD)/fmeasurment.v
-COMPILE_ARGS 	+= -Ptt_um_gfg_development_tros.SIMULATION=1
+VERILOG_SOURCES += $(PWD)/tb.v $(PWD)/tt_um_gfg_development_tros.v $(PWD)/fmeasurment.v # $(PWD)/ros_einv_sub.v $(PWD)/ros_nand4_cap.v $(PWD)/ros_nand4.v
+COMPILE_ARGS 	+= -DSIM
 
 else
 
