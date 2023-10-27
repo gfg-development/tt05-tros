@@ -49,21 +49,20 @@ async def test_clock_divider(dut):
     dut._log.info("reset")
     dut.rst_n.value = 0
     dut.ui_in.value = 0
-    # set the compare value
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
 
-    # reset counters
-    dut._log.info("reset counters")
-    dut.ui_in.value = 2
-    await ClockCycles(dut.clk, 10)
-    dut.ui_in.value = 0
+    # test the different divider
+    for i in range(4):
+        # reset counters
+        dut._log.info("reset counters and set divider")
+        dut.ui_in.value = 2 + i << 6
+        await ClockCycles(dut.clk, 10)
+        dut.ui_in.value = 0 + i << 6
 
-    cycles = 160
-    divider = 4
-    period_ns = 20 * divider
-    await test_divider(dut.tt_um_gfg_development_tros.nand4_div_clk, period_ns, cycles)
-    await test_divider(dut.tt_um_gfg_development_tros.nand4_cap_div_clk, period_ns, cycles)
-    await test_divider(dut.tt_um_gfg_development_tros.inv_sub_div_clk, period_ns, cycles)
-
-    await ClockCycles(dut.clk, 1000)
+        cycles = 160
+        divider = 4  + 4 * i
+        period_ns = 20 * divider
+        await test_divider(dut.tt_um_gfg_development_tros.nand4_div_clk, period_ns, cycles)
+        await test_divider(dut.tt_um_gfg_development_tros.nand4_cap_div_clk, period_ns, cycles)
+        await test_divider(dut.tt_um_gfg_development_tros.inv_sub_div_clk, period_ns, cycles)
