@@ -3,23 +3,40 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles, First
 from cocotb.result import TestFailure
 
-async def test_divider(signal, duration_ns, cycles):
+
+async def count_edges_cycles(signal, edges):
+    edge = RisingEdge(signal)
+    for i in range(edges):
+        await edge
+        signal._log.info("Rising edge %d detected" % i)
+    signal._log.info("Finished, returning %d" % edges)
+    return edges
+
+async def test_divider(signal, periode_ns, cycles):
     await RisingEdge(signal)
-    timer = Timer(duration_ns, 'ns')
-    edge_div_clk  = RisingEdge(signal)
-    count_div_clk = 0
+    
+    timer = Timer(periode_ns, "ns")
+    task = cocotb.start_soon(count_edges_cycles(signal, cycles))
+    count = 0
+    expect = cycles - 1
+
     while True:
-        result = await First(timer, edge_div_clk)
+        result = await First(timer, task.join())
+        assert count <= expect, "Task didn't complete in expected time"
         if result is timer:
-            if cycles != count_div_clk:
-                assert count_div_clk == cycles, "Wrong number of clock cylces:"
-            else:
-                break
-        elif result == edge_div_clk:
-            count_div_clk += 1
-
-        # assert count_div_clk <= cycles, "Wrong number of clock cylces:"
-
+            signal._log.info("Count %d: Task still running" % count)
+            count += 1
+        else:
+            break
+    assert count == expect, "Expected to monitor the task %d times but got %d" % (
+        expect,
+        count,
+    )
+    assert result == cycles, "Expected task to return %d but got %s" % (
+        cycles,
+        repr(result),
+    )
+    
 
 @cocotb.test()
 async def test_clock_divider(dut):
