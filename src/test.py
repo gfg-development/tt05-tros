@@ -7,10 +7,11 @@ async def test_divider(signal, duration_ns, cycles):
     await RisingEdge(signal)
     timer = Timer(duration_ns, 'ns')
     edge_div_clk  = RisingEdge(signal)
-
+    signal._log.info("Go into loop")
     count_div_clk = 0
     while True:
         result = await First(timer, edge_div_clk)
+        signal._log.info("Fired")
         if result == timer:
             if cycles != count_div_clk:
                 raise TestFailure("Wrong number of clock cylces: {} != {}".format(count_div_clk, cycles))
