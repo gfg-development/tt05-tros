@@ -26,6 +26,9 @@ set ::env(GLB_RESIZER_HOLD_SLACK_MARGIN) 0.05
 set ::env(RUN_LINTER) 1
 set ::env(LINTER_INCLUDE_PDK_MODELS) 1
 
+# provide a way for people to stop the resizer from changing cells
+set ::env(RSZ_DONT_TOUCH_RX) "_notouch_"
+
 # Configuration docs: https://openlane.readthedocs.io/en/latest/reference/configuration.html
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -72,9 +75,6 @@ set ::env(DECAP_CELL) "\
 # Clock
 set ::env(RUN_CTS) 1
 set ::env(CLOCK_PORT) {clk}
-
-# provide a way for people to stop the resizer from changing cells
-set ::env(RSZ_DONT_TOUCH_RX) "_notouch_"
 
 # Don't use power rings or met5 layer
 set ::env(DESIGN_IS_CORE) 0
