@@ -60,7 +60,7 @@ async def test_clock_divider(dut):
 
     cycles = 160
     divider = 4
-    period_ns = 20 / divider
+    period_ns = 20 * divider
     await test_divider(dut.tt_um_gfg_development_tros.nand4_div_clk, period_ns, cycles)
     await test_divider(dut.tt_um_gfg_development_tros.nand4_cap_div_clk, period_ns, cycles)
     await test_divider(dut.tt_um_gfg_development_tros.inv_sub_div_clk, period_ns, cycles)
