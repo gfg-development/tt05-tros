@@ -16,8 +16,11 @@ async def test_clock_divider(dut):
     # set the compare value
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
-    dut._log.info("Are big endian: {}".format(dut.ui_in.bigEndian))
 
     # reset counters
     dut._log.info("reset counters")
-    await ClockCycles(dut.clk, 100)
+    dut.ui_in.value = 2
+    await ClockCycles(dut.clk, 10)
+    dut.ui_in.value = 0
+
+    await ClockCycles(dut.clk, 1000)
