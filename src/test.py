@@ -18,7 +18,7 @@ async def test_divider(signal, periode_ns, cycles):
     timer = Timer(periode_ns, "ns")
     task = cocotb.start_soon(count_edges_cycles(signal, cycles))
     count = 0
-    expect = cycles - 1
+    expect = cycles
 
     while True:
         result = await First(timer, task.join())
@@ -28,6 +28,7 @@ async def test_divider(signal, periode_ns, cycles):
             count += 1
         else:
             break
+
     assert count == expect, "Expected to monitor the task %d times but got %d" % (
         expect,
         count,
