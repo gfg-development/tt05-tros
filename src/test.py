@@ -54,7 +54,7 @@ async def test_clock_divider(dut):
     # test the different divider
     for i in range(4):
         # reset counters
-        divider = 4 + 4 * i
+        divider = 4 * (i + 1)
         dut._log.info("reset counters and set divider for divider: {}".format(divider))
         dut.ui_in.value = 2 + (i << 6)
         await ClockCycles(dut.clk, 10)
