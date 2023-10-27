@@ -1,7 +1,6 @@
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles, First
-from cocotb.result import TestFailure
 
 
 async def count_edges_cycles(signal, edges):
@@ -55,13 +54,13 @@ async def test_clock_divider(dut):
     # test the different divider
     for i in range(4):
         # reset counters
-        dut._log.info("reset counters and set divider")
-        dut.ui_in.value = 2 + i << 6
+        divider = 4 + 4 * i
+        dut._log.info("reset counters and set divider for divider: {}".format(divider))
+        dut.ui_in.value = 2 + (i << 6)
         await ClockCycles(dut.clk, 10)
-        dut.ui_in.value = 0 + i << 6
+        dut.ui_in.value = 0 + (i << 6)
 
         cycles = 160
-        divider = 4  + 4 * i
         period_ns = 20 * divider
         await test_divider(dut.tt_um_gfg_development_tros.nand4_div_clk, period_ns, cycles)
         await test_divider(dut.tt_um_gfg_development_tros.nand4_cap_div_clk, period_ns, cycles)
