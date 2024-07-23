@@ -48,10 +48,10 @@ documentation:
 
       Furthermore, a divided version of the clock of each oscillator is outputted. The divisior
       can be configured with the frequency selection bits. The divisors are: 
-       - 0b00: 2
-       - 0b01: 8
-       - 0b10: 32
-       - 0b11: 128 
+        - 0b00: 2
+        - 0b01: 8
+        - 0b10: 32
+        - 0b11: 128 
 
 # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
   how_to_test: |
