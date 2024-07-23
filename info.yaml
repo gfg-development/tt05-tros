@@ -52,7 +52,13 @@ documentation:
 
 # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
   how_to_test: |
-      TODO
+      Most simple approach is to measure the frequency of the output pins 5 to 7. With this it
+      is possible to check, that the oscillators are working.
+      Further test-steps are to programm the RP2040 with the MicroPython scripts in the firmware
+      folder. 
+      The script main_frequency.py and plot_frequency.py can be used to measure the frequency with
+      the PIOs on the RP2040 and plot the frequency over time of the 3 oscillators. The plotting 
+      script assumes, that ttyACM0 is the demoboard. 
 
 # A description of what the inputs do (e.g. red button, SPI CLK, SPI MOSI, etc).
   inputs: 
