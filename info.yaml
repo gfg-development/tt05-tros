@@ -31,10 +31,15 @@ documentation:
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
-      This design implements three different ring oscillators. The first one is a basic NAND 
-      based oscillator. The second one adds additional NAND gates to the outputs of the stages
-      of the oscillator to increase the capacitve loading. The last one uses the tri-state
-      inverts with a sub-threshold tri-state enable. 
+      This design implements three different ring oscillators. The first one is a basic NAND4 
+      based oscillator, with 67 and a frequency of around 30 MHz. The second one adds 8 additional 
+      NAND gates to the outputs of the stages of the oscillator to increase the capacitve loading. 
+      This oscillator uses 35 stages and has a frequency of around 20 MHz. The last one uses the 
+      tri-state inverts with a sub-threshold tri-state enable. This last oscillator uses one NAND 
+      gate for enabling/disabling the oscillator and 6 normal inverters and 18 sub-threshold 
+      tristate-inverters. The normal inverters are used to increase the slope of the signal, to 
+      ensure, that the following inverters are working. This oscillators has a frequency of around 
+      23 MHz.
 
       For measuring the frequencies each oscillator is driving a counter. This counters are
       latched with the latch counter input. With the input transfer counter the currently 
@@ -42,7 +47,8 @@ documentation:
       transfer is driven by the clock of the design. As encoding a manchester encoding is used. 
 
       Furthermore, a divided version of the clock of each oscillator is outputted. The divisior
-      can be configured with the frequency selection bits. 
+      can be configured with the frequency selection bits. The divisors are: 
+      0b00: 2**1, 0b01: 2**3, 0b10: 2**5, 0b11: 2**7 
 
 # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
   how_to_test: |
